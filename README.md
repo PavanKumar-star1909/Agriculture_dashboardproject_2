@@ -1,43 +1,41 @@
-Agriculture Dashboard Project Wiki
-1. Project Overview
+---
 
-India’s agricultural sector is vital for the economy, but managing agricultural data is complex and fragmented. This project aims to create an interactive data visualization platform that integrates agricultural data from different states and districts.
+# **Agriculture Dashboard Project **
 
-Goals:
+## **1. Project Overview**
 
-Provide insights into crop production, yield, and area under cultivation.
+India’s agriculture is vital for the economy, but managing agricultural data is challenging due to its fragmented nature. This project creates an **interactive dashboard** to visualize agricultural data across states and districts, helping stakeholders make informed decisions.
 
-Help farmers make informed decisions about crop selection.
+**Goals:**
 
-Assist policymakers in resource allocation and monitoring.
+* Provide insights into crop production, yield, and cultivation area.
+* Enable farmers to optimize crop selection.
+* Assist policymakers in resource allocation and monitoring.
+* Support researchers in analyzing trends and innovation opportunities.
 
-Enable researchers to analyze trends and agricultural performance.
+**Stakeholders & Use Cases:**
 
-Stakeholders & Use Cases:
+* **Farmers:** Explore historical crop data, regional productivity, and optimize crop choices.
+* **Policymakers:** Identify low-yield regions, plan interventions, and manage crop risk.
+* **Researchers:** Analyze crop trends, climate impact, and evaluate agricultural innovations.
 
-Farmers: Explore historical crop performance, regional productivity, and optimize crop choices.
+---
 
-Policymakers: Identify low-yield regions and plan interventions or subsidies.
+## **2. Project Setup**
 
-Researchers: Analyze crop trends, climate impacts, and explore innovation opportunities.
+**Technologies Used:**
 
-2. Project Setup
+* Python (Pandas, NumPy, Matplotlib, Seaborn, Plotly)
+* MySQL
+* Power BI
+* Streamlit (for future deployment)
 
-Required Tools & Technologies:
+**Folder Structure:**
 
-Python (Pandas, NumPy, Matplotlib/Seaborn/Plotly)
-
-MySQL Database
-
-Power BI Desktop
-
-Streamlit (for future web dashboard)
-
-Folder Structure:
-
+```
 agriculture_dashboard/
 │
-├─ data/                 # Raw and cleaned CSV files
+├─ data/                 # Raw & cleaned CSV
 │   └─ ICRISAT-District Level Data_clean.csv
 │
 ├─ scripts/              # Python scripts
@@ -47,102 +45,86 @@ agriculture_dashboard/
 │   └─ forecasting.py
 │
 └─ README.md
+```
 
-3. Data Cleaning
+---
 
-Cleaned column names to lowercase and replaced spaces with underscores.
+## **3. Data Cleaning**
 
-Stripped whitespace and normalized case for state_name and dist_name.
+* Standardized column names (lowercase, underscores instead of spaces).
+* Stripped whitespace and normalized `state_name` & `dist_name`.
+* Converted numeric columns (`area`, `production`, `yield`) to numbers.
+* Recalculated yields (`production ÷ area`) where necessary.
+* Dropped rows missing `year` or `state_name`.
+* **Cleaned CSV saved:** `data/ICRISAT-District Level Data_clean.csv`
 
-Converted numeric columns (area, production, yield) to numeric type.
+---
 
-Recalculated yields (production/area) for accuracy.
+## **4. Database Loading (MySQL)**
 
-Dropped rows with missing year or state_name.
+* **Database:** `Agriculture_dashboard`
+* **Table:** `agriculture_data`
 
-Saved cleaned CSV:
-data/ICRISAT-District Level Data_clean.csv
+**Python Script:** `db_load.py`
 
-4. Database Loading (MySQL)
+* Loads the cleaned CSV.
+* Connects to MySQL using credentials:
 
-Database Name: Agriculture_dashboard
-
-Table Name: agriculture_data
-
-Python Script: db_load.py
-
-Reads the cleaned CSV.
-
-Connects to MySQL using credentials:
-
+```python
 MYSQL_USER = "pavankumar"
 MYSQL_PASSWORD = "PAva19@#"
 MYSQL_DB = "Agriculture_dashboard"
 MYSQL_HOST = "localhost"
+```
 
+* Dynamically creates the table and inserts all rows.
+* ✅ Successfully loaded **16,146 rows** with **81 columns**.
 
-Creates the table dynamically based on CSV columns.
+---
 
-Inserts all rows into the database.
+## **5. Exploratory Data Analysis (EDA)**
 
-✅ Database now contains 16,146 rows and 81 columns.
+Visualizations created using **Python (Plotly/Seaborn/Matplotlib)**:
 
-5. Exploratory Data Analysis (EDA)
+* **Bar Charts:** Top 7 rice-producing states, Top 5 wheat-producing states
+* **Pie/Donut Charts:** Share of wheat production by top states
+* **Line Charts:** Sugarcane trends over 50 years, Rice vs Wheat production
+* **Scatter Plots:** Area vs Production correlations
+* **Filters:** Year, State, Crop Type for interactive exploration
 
-Visualizations are generated using Python (Plotly / Seaborn / Matplotlib).
+---
 
-Example charts created:
+## **6. Power BI Visualizations**
 
-Top 7 rice-producing states (Bar plot)
+**Steps:**
 
-Top 5 wheat-producing states (Bar + Pie chart)
+1. Load the cleaned CSV into Power BI.
+2. Create visuals:
 
-Oilseed production by top 5 states
+   * **Map/Filled Map:** Crop production/yield distribution
 
-Trend of sugarcane production over 50 years (Line plot)
+     * **Location:** `state_name` or `dist_name`
+     * **Size:** `production` column
+     * **Color:** `yield` column
+     * **Tooltip:** Area, Production, Yield
+   * **Line Chart:** Crop trends over time
+   * **Bar/Column Chart:** Compare crop production across states
+   * **Donut Chart:** Share of production by top states
+   * **Slicers:** Year, Crop Type, State for interactive filtering
 
-Rice vs. Wheat production comparison
+**Interactivity:**
 
-Millet, Sorghum, Groundnut, Soybean production analysis
+* Selecting a state updates all visuals.
+* Year slicer allows analysis of specific years.
+* Crop slicer allows switching between crops.
 
-Interactive filters for Year, State, and Crop Type implemented.
+---
 
-6. Power BI Visualizations
+## **7. Next Steps**
 
-Loaded cleaned CSV directly into Power BI.
+* Implement **forecasting models** to predict crop yields.
+* Build a **Streamlit web dashboard** for interactive access.
+* Integrate **dynamic SQL queries** in Power BI for live data updates.
 
-Visuals Used:
+---
 
-Map / Filled Map: shows crop production/yield distribution by state or district
-
-Location: state_name or dist_name
-
-Size: rice_production_1000_tons (or other crops)
-
-Color saturation: rice_yield_kg_per_ha
-
-Tooltip: state_name, area, production, yield
-
-Line Charts: Crop trends over time (e.g., rice production last 50 years)
-
-Bar / Column Charts: Compare production across states
-
-Donut Charts: Share of crop production by top states
-
-Slicers: Interactive filters for Year, Crop Type, State
-
-Interactivity:
-
-Selecting a state updates all visuals.
-
-Year slicer allows trend analysis for specific years.
-
-Crop slicer allows switching between crops.
-
-7. Next Steps
-
-Implement Forecasting: Predict crop yields using ML models.
-
-Build a Streamlit web dashboard for end-users.
-
-Integrate SQL queries in Power BI to fetch data dynamically.
